@@ -9,6 +9,7 @@
 
 
   <div class="keys">
+  <!-- 65 is connected to the number that is for A on keyboard -->
     <div data-key="65" class="key">
       <kbd>A</kbd>
       <span class="sound">clap</span>
@@ -58,6 +59,42 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+
+function playSound(e){
+    // select something that is an audio object and grab keycode
+  const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+  // select something with a class of key(.key)
+  const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+    // rewind to start
+    audio.currentTime = 0;
+
+    // if there is not audio object with a key, stop function
+    if(!audio){
+      return;
+    }
+    // play audio
+    audio.play();
+
+    // add class to key... same as .addClass in jQuery
+    key.classList.add('playing');
+}
+
+// remove animation from key
+  function removeTransition(e){
+    // skip if it's not a transform property
+    if (e.propertyName !== 'transform'){
+      return;
+    }
+    // this key - remove class
+      this.classList.remove('playing');
+  }
+
+  const keys = document.querySelectorAll('.key');
+  // For each key, add event listener 'transitionend', when event happens run removeTransition function
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+
+// listen for keydown event
+window.addEventListener('keydown', playSound);
 
 </script>
 
